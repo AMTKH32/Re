@@ -1,27 +1,20 @@
-import { useContext, useEffect, useRef } from "react";
+import { useContext, useEffect, useRef, useState } from "react";
 import { ThemeContext } from "../../context/ThemeContext";
-import { LIGHT_THEME } from "../../constants/themeConstants";
-import LogoBlue from "../../assets/images/logo_blue.svg";
-import LogoWhite from "../../assets/images/logo_white.svg";
-import {
-  MdOutlineAttachMoney,
-  MdOutlineBarChart,
-  MdOutlineClose,
-  MdOutlineCurrencyExchange,
-  MdOutlineGridView,
-  MdOutlineLogout,
-  MdOutlineMessage,
-  MdOutlinePeople,
-  MdOutlineSettings,
-  MdOutlineShoppingBag,
-} from "react-icons/md";
-import { Link } from "react-router-dom";
-import "./Sidebar.scss";
 import { SidebarContext } from "../../context/SidebarContext";
+import { MdOutlineClose, MdOutlineGridView, MdOutlineMessage, MdOutlineSettings, MdOutlineShoppingBag, MdOutlineLogout } from "react-icons/md";
+import { Link, useLocation } from "react-router-dom";
+import "./Sidebar.scss";
 
 const Sidebar = () => {
-  const { theme, currentPath, setCurrentPath } = useContext(ThemeContext);
   const { isSidebarOpen, closeSidebar } = useContext(SidebarContext);
+  const { pathname } = useLocation();
+
+  const [currentPath, setCurrentPath] = useState("");
+
+  useEffect(() => {
+    setCurrentPath(pathname);
+  }, [pathname]);
+
   const navbarRef = useRef(null);
 
   // closing the navbar when clicked outside the sidebar area
@@ -49,7 +42,6 @@ const Sidebar = () => {
     >
       <div className="sidebar-top">
         <div className="sidebar-brand">
-          {/* <img src={theme === LIGHT_THEME ? LogoBlue : LogoWhite} alt="" /> */}
           <span style={{
             marginLeft:"10px"
           }} className="text-red-600 font-black text-xl">FORMITE</span>
@@ -61,42 +53,45 @@ const Sidebar = () => {
       <div className="sidebar-body">
         <div className="sidebar-menu">
           <ul className="menu-list">
-            <li className="menu-item">
-              <Link to="/" className="menu-link active">
+            <li className={pathname === "/" ? "active bg-black  menu-item" : ""}>
+              <Link to="/" className="menu-link ">
                 <span className="menu-link-icon">
                   <MdOutlineGridView size={18} />
                 </span>
                 <span className="menu-link-text">Dashboard</span>
               </Link>
             </li>
-           
-            <li className="menu-item" onClick={() => setCurrentPath("/Products")}>
-              <Link to="/Products" className={`menu-link ${currentPath === "/Products" ? "active" : ""}`} >
+            <li className={pathname === "/Products" ? "active menu-item" : ""}>
+              <Link to="/Products" className="menu-link">
                 <span className="menu-link-icon">
                   <MdOutlineShoppingBag size={20} />
                 </span>
                 <span className="menu-link-text">Product</span>
               </Link>
-            </li>
 
-            <li className="menu-item">
-              <Link to="/" className="menu-link">
+            </li>
+            <li className={pathname === "/Support" ? "active menu-item" : ""}>
+              <Link to="/Support" className="menu-link">
                 <span className="menu-link-icon">
                   <MdOutlineMessage size={18} />
                 </span>
-                <span className="menu-link-text">Messages</span>
+                <span className="menu-link-text">Support</span>
               </Link>
             </li>
-            <li className="menu-item">
-              <Link to="/" className="menu-link">
+
+            <li className={pathname === "/Setting" ? "active menu-item" : ""}>
+              <Link to="/Setting" className="menu-link">
                 <span className="menu-link-icon">
                   <MdOutlineSettings size={20} />
                 </span>
                 <span className="menu-link-text">Settings</span>
               </Link>
             </li>
-            <li className="menu-item">
-              <Link to="/" className="menu-link">
+
+
+
+            <li className={pathname === "/Logout" ? "active menu-item" : ""}>
+              <Link to="/Logout" className="menu-link">
                 <span className="menu-link-icon">
                   <MdOutlineLogout size={20} />
                 </span>
@@ -105,11 +100,8 @@ const Sidebar = () => {
             </li>
           </ul>
         </div>
-
         <div className="sidebar-menu sidebar-menu2">
           <ul className="menu-list">
-
-        
           </ul>
         </div>
       </div>
@@ -118,5 +110,3 @@ const Sidebar = () => {
 };
 
 export default Sidebar;
-
-

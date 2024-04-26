@@ -1,15 +1,14 @@
 import { useContext, useEffect } from "react";
 import "./App.scss";
 import './index.css'
-
 import { ThemeContext } from "./context/ThemeContext";
 import { DARK_THEME, LIGHT_THEME } from "./constants/themeConstants";
 import { BrowserRouter as Router, Routes, Route } from "react-router-dom";
-import MoonIcon from "./assets/icons/moon.svg";
-import SunIcon from "./assets/icons/sun.svg";
 import BaseLayout from "./layout/BaseLayout";
 import { Dashboard, PageNotFound } from "./screens";
 import Products from "./components/dashboard/Product-Page/Products";
+import Support from "./components/dashboard/Support-Page/Support";
+import Setting from "./components/dashboard/Setting-Page/Setting";
 
 function App() {
   const { theme, toggleTheme } = useContext(ThemeContext);
@@ -30,7 +29,10 @@ function App() {
           <Route element={<BaseLayout />}>
             <Route path="/" element={<Dashboard />} />
             <Route path="Products" element={<Products/>} />
+            <Route path="Support" element={<Support/>} />
+            <Route path="Setting" element={<Setting/>} />
             <Route path="*" element={<PageNotFound />} />
+            
           </Route>
         </Routes>
 
