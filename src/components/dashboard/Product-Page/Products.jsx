@@ -9,6 +9,8 @@ const Products = () => {
   const [productImage, setProductImage] = useState(null);
   // State for managing the input value for material code
   const [materialCode, setMaterialCode] = useState('');
+  // State for managing the selected category
+  const [selectedCategory, setSelectedCategory] = useState('');
   // State for managing the modal visibility
   const [showModal, setShowModal] = useState(false);
   // State for managing the index of the product being edited
@@ -16,19 +18,24 @@ const Products = () => {
   // State for managing the index of the product being deleted
   const [deleteIndex, setDeleteIndex] = useState(null);
 
+  // List of categories
+  const categories = ['Solid', 'Pattern', '3D', 'Elegant Series', 'Fabric','Marble','wood grains'];
+
   // Function to handle adding a new product
   const addProduct = () => {
-    if (productName.trim() !== '' && productImage && materialCode.trim() !== '') {
+    if (productName.trim() !== '' && productImage && materialCode.trim() !== '' && selectedCategory) {
       const newProduct = {
         name: productName,
         image: URL.createObjectURL(productImage), // Convert image to URL
-        materialCode: materialCode
+        materialCode: materialCode,
+        category: selectedCategory
       };
       setProducts([...products, newProduct]);
       // Reset input fields
       setProductName('');
       setProductImage(null);
       setMaterialCode('');
+      setSelectedCategory('');
       // Close the modal
       setShowModal(false);
     }
@@ -48,17 +55,19 @@ const Products = () => {
     const productToEdit = products[index];
     setProductName(productToEdit.name);
     setMaterialCode(productToEdit.materialCode);
+    setSelectedCategory(productToEdit.category);
     // Show modal
     setShowModal(true);
   };
 
   // Function to handle updating a product
   const updateProduct = () => {
-    if (productName.trim() !== '' && productImage && materialCode.trim() !== '') {
+    if (productName.trim() !== '' && productImage && materialCode.trim() !== '' && selectedCategory) {
       const updatedProduct = {
         name: productName,
         image: URL.createObjectURL(productImage), // Convert image to URL
-        materialCode: materialCode
+        materialCode: materialCode,
+        category: selectedCategory
       };
       const updatedProducts = [...products];
       updatedProducts[editIndex] = updatedProduct;
@@ -67,15 +76,18 @@ const Products = () => {
       setProductName('');
       setProductImage(null);
       setMaterialCode('');
+      setSelectedCategory('');
       // Close the modal
       setShowModal(false);
       setEditIndex(null);
     }
   };
+
   const closeDeleteConfirmation = () => {
     setDeleteIndex(null);
     setShowModal(false);
   };
+
   // Function to handle deleting a product
   const deleteProduct = () => {
     const updatedProducts = [...products];
@@ -96,7 +108,7 @@ const Products = () => {
   return (
     <div className="bg-white">
       <div className="mx-auto max-w-2xl px-4 py-16 sm:px-6 sm:py-24 lg:max-w-7xl lg:px-8">
-        <h2 className="text-2xl font-sans  tracking-tight text-gray-900">Products</h2>
+        <h2 className="text-2xl font-sans tracking-tight text-gray-900">Products</h2>
 
         {/* Button to open the modal */}
         <button
@@ -129,6 +141,26 @@ const Products = () => {
                   placeholder="Enter material code"
                   className="px-4 py-2 border rounded-lg focus:outline-none focus:ring focus:border-blue-300"
                 />
+
+                <div className="col-span-2 border">
+                  <label htmlFor="categorySelect" className="block text-sm font-medium text-gray-700 ">
+                   
+                  </label>
+                  <select
+                    id="categorySelect"
+                    value={selectedCategory}
+                    onChange={(e) => setSelectedCategory(e.target.value)}
+                    className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
+                  >
+                    <option value="">Select a category</option>
+                    {categories.map((category, index) => (
+                      <option key={index} value={category}>
+                        {category}
+                      </option>
+                    ))}
+                  </select>
+                </div>
+                
                 <div className="col-span-2">
                   <label htmlFor="imageUpload" className="block text-sm font-medium text-gray-700">
                     Add Image
@@ -189,18 +221,19 @@ const Products = () => {
         <div className="mt-6">
           <ul className="list-disc pl-6">
             {products.map((product, index) => (
-              <li key={index} className="flex items-center  border rounded-lg p-9 ">
+              <li key={index} className="flex items-center border rounded-lg p-9">
                 <img src={product.image} alt={product.name} className="w-16 h-16 rounded-full mr-4" />
                 <div>
                   <span className="text-lg font-semibold">{product.name}</span>
                   <p className="text-sm text-gray-500">Material Code: {product.materialCode}</p>
+                  <p className="text-sm text-gray-500">Category: {product.category}</p>
                 </div>
                 <span className="ml-auto text-blue-500 cursor-pointer" onClick={() => editProduct(index)}>Edit</span>
                 <span className="ml-2 text-red-500 cursor-pointer" onClick={() => openDeleteConfirmation(index)}>Delete</span>
               </li>
             ))}
           </ul>
-          {products.length === 0 && <p className="text-gray-500  flex justify-center">No products available</p>}
+          {products.length === 0 && <p className="text-gray-500 flex justify-center">No products available</p>}
         </div>
       </div>
     </div>
