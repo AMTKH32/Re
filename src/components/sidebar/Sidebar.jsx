@@ -75,29 +75,29 @@ const Sidebar = () => {
                 <span className="menu-link-icon">
                   <MdOutlineMessage size={18} />
                 </span>
-                <span className="menu-link-text">Support</span>
+                <span className="menu-link-text">Contact us</span>
               </Link>
             </li>
 
-            <li className={pathname === "/Setting" ? "active menu-item" : ""}>
+            {/* <li className={pathname === "/Setting" ? "active menu-item" : ""}>
               <Link to="/Setting" className="menu-link">
                 <span className="menu-link-icon">
                   <MdOutlineSettings size={20} />
                 </span>
                 <span className="menu-link-text">Settings</span>
               </Link>
-            </li>
+            </li> */}
 
 
 
-            <li className={pathname === "/Logout" ? "active menu-item" : ""}>
+            {/* <li className={pathname === "/Logout" ? "active menu-item" : ""}>
               <Link to="/Logout" className="menu-link">
                 <span className="menu-link-icon">
                   <MdOutlineLogout size={20} />
                 </span>
                 <span className="menu-link-text">Logout</span>
               </Link>
-            </li>
+            </li> */}
           </ul>
         </div>
         <div className="sidebar-menu sidebar-menu2">

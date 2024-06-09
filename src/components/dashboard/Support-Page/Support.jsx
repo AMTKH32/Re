@@ -37,9 +37,9 @@ const Support = () => {
                 <p className="text-gray-700">{ticket.description}</p>
               </div>
             )}
-            <p className={`text-sm font-semibold mt-2 ${ticket.status === 'Open' ? 'text-green-600' : ticket.status === 'Closed' ? 'text-green-600' : 'text-yellow-600'}`}>
+            {/* <p className={`text-sm font-semibold mt-2 ${ticket.status === 'Open' ? 'text-green-600' : ticket.status === 'Closed' ? 'text-green-600' : 'text-yellow-600'}`}>
               Status: {ticket.status}
-            </p>
+            </p> */}
           </div>
         ))}
       </div>
