@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const backend_base = "https://formitebackend-production.up.railway.app";
+export const backend_base = "https://formitebackendnew2024-production.up.railway.app";
 // export const backend_base = "https://auction-backend-production-df32.up.railway.app";
 export const image_base = `${backend_base}/uploads`;
 

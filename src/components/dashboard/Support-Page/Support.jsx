@@ -1,12 +1,33 @@
-import React, { useState } from 'react';
+import React, { useState, useEffect } from 'react';
+import axios from 'axios';
 import { FaAngleDown } from 'react-icons/fa';
 
 const Support = () => {
-  const [tickets, setTickets] = useState([
-    { id: 1, subject: 'Issue with login', time: '2024-04-24 09:00', status: 'Open', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis odio eu quam posuere consectetur.' },
-    { id: 2, subject: 'Error loading page', time: '2024-04-23 15:30', status: 'Open', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis odio eu quam posuere consectetur.' },
-    { id: 3, subject: 'Cannot update profile', time: '2024-04-22 11:45', Contact:" 0227272", status: 'In Progress', description: 'Lorem ipsum dolor sit amet, consectetur adipiscing elit. Nulla venenatis odio eu quam posuere consectetur.' }
-  ]);
+  const [tickets, setTickets] = useState([]);
+
+  useEffect(() => {
+    // Function to fetch ticket data from the API
+    const fetchTickets = async () => {
+      try {
+        const response = await axios.get('https://formitebackendnew2024-production.up.railway.app/api/users');
+        // Assuming the API returns an array of ticket objects
+        const ticketData = response.data.map((ticket, index) => ({
+          id: index + 1,  // Generate an id if not provided
+          subject: ticket.subject,
+          time: new Date().toISOString(),  // Use current date and time as a placeholder
+          status: 'Open',  // Default status
+          Contact: ticket.phone,
+          description: `${ticket.name}, ${ticket.email}, ${ticket.location}, ${ticket.occupation}`,  // Combine all details into description
+          isOpen: false  // Initially set to false
+        }));
+        setTickets(ticketData);
+      } catch (error) {
+        console.error('Error fetching ticket data:', error);
+      }
+    };
+
+    fetchTickets();
+  }, []);
 
   const toggleStatus = (ticketId) => {
     setTickets(tickets.map(ticket => {
