@@ -8,7 +8,7 @@ const TABLE_HEADS = [
   // "Customer name",
   // "Status",
   // "Amount",
-  "Action",
+  "Total",
 ];
 
 const TABLE_DATA = [
@@ -90,18 +90,10 @@ const AreaTable = () => {
                   <td>{dataItem.name}</td>
                   <td>{dataItem.order_id}</td>
                   <td>{dataItem.date}</td>
-                  {/* <td>{dataItem.customer}</td> */}
-                  {/* <td>
-                    <div className="dt-status">
-                      <span
-                        className={`dt-status-dot dot-${dataItem.status}`}
-                      ></span>
-                      <span className="dt-status-text">{dataItem.status}</span>
-                    </div>
-                  </td> */}
-                  {/* <td>${dataItem.amount.toFixed(2)}</td> */}
+                 
                   <td className="dt-cell-action">
-                    <AreaTableAction />
+                    {/* <AreaTableAction /> */}
+                    <p>4</p>
                   </td>
                 </tr>
               );

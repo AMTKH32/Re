@@ -8,31 +8,31 @@ import {
 import { useEffect } from "react";
 
 const Products = () => {
-  // State for managing the list of products
   const [products, setProducts] = useState([]);
-  // State for managing the input value for product name
   const [productName, setProductName] = useState("");
-  // State for managing the input value for product image
   const [productImage, setProductImage] = useState(null);
-  // State for managing the input value for material code
   const [materialCode, setMaterialCode] = useState("");
-  // State for managing the selected category
   const [selectedCategory, setSelectedCategory] = useState("");
-  // State for managing the modal visibility
   const [showModal, setShowModal] = useState(false);
-  // State for managing the index of the product being edited
   const [editIndex, setEditIndex] = useState(null);
-  // State for managing the index of the product being deleted
   const [deleteIndex, setDeleteIndex] = useState(null);
+  const [loading, setLoading] = useState(false); // State for loading indicator
+
   useEffect(() => {
     const fetchAllProducts = async () => {
-      const res = await getAllProducts();
-      console.log(res);
-      setProducts(res?.products);
+      setLoading(true); // Set loading to true before fetching
+      try {
+        const res = await getAllProducts();
+        setProducts(res?.products);
+      } catch (error) {
+        console.log("Error fetching products:", error);
+      } finally {
+        setLoading(false); // Set loading to false after fetching
+      }
     };
     fetchAllProducts();
   }, []);
-  // List of categories
+
   const categories = [
     "Solid",
     "Pattern",
@@ -43,7 +43,6 @@ const Products = () => {
     "wood grains",
   ];
 
-  // Function to handle adding a new product
   const onSubmit = async () => {
     if (
       productName.trim() !== "" &&
@@ -52,27 +51,27 @@ const Products = () => {
       selectedCategory
     ) {
       try {
+        setLoading(true); // Set loading to true before adding product
         const res = await addProduct({
           name: productName,
           code: materialCode,
           category: selectedCategory,
           image: productImage,
         });
-        console.log("res", res);
         setProducts([...products, res?.newProduct]);
         setProductName("");
         setProductImage(null);
         setMaterialCode("");
         setSelectedCategory("");
-        // Close the modal
         setShowModal(false);
       } catch (error) {
-        console.log(error);
+        console.log("Error adding product:", error);
+      } finally {
+        setLoading(false); // Set loading to false after adding product or error
       }
     }
   };
 
-  // Function to handle file input change
   const handleFileInputChange = (e) => {
     const file = e.target.files[0];
     if (file) {
@@ -85,19 +84,21 @@ const Products = () => {
     setShowModal(false);
   };
 
-  // Function to handle deleting a product
   const deleteP = async () => {
     const updatedProducts = [...products];
     const deletedProduct = updatedProducts.splice(deleteIndex, 1);
-    console.log(deletedProduct);
-    await deleteProduct({ productId: deletedProduct[0]._id });
-    setProducts(updatedProducts);
-    // Reset deleteIndex
-    setDeleteIndex(null);
-    // Close the confirmation dialog
+    setLoading(true); // Set loading to true before deleting product
+    try {
+      await deleteProduct({ productId: deletedProduct[0]._id });
+      setProducts(updatedProducts);
+      setDeleteIndex(null);
+    } catch (error) {
+      console.log("Error deleting product:", error);
+    } finally {
+      setLoading(false); // Set loading to false after deleting product or error
+    }
   };
 
-  // Function to open the confirmation dialog for deleting a product
   const openDeleteConfirmation = (index) => {
     setDeleteIndex(index);
   };
@@ -109,18 +110,16 @@ const Products = () => {
           Products
         </h2>
 
-        {/* Button to open the modal */}
         <button
           onClick={() => {
             setShowModal(true);
-            setEditIndex(null); // Reset edit index when adding new product
+            setEditIndex(null);
           }}
           className="absolute right-4 bg-[#475be8] text-white px-7 py-2 rounded-lg hover:bg-blue-600 focus:outline-none focus:ring focus:border-blue-300"
         >
           Add Product
         </button>
 
-        {/* Modal for adding new products */}
         {showModal && (
           <div className="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50">
             <div className="bg-white p-8 rounded-lg shadow-lg">
@@ -198,14 +197,11 @@ const Products = () => {
           </div>
         )}
 
-        {/* Confirmation dialog for deleting a product */}
         {deleteIndex !== null && (
           <div className="fixed inset-0 flex justify-center items-center bg-gray-900 bg-opacity-50">
             <div className="bg-white p-8 rounded-lg shadow-lg">
               <h3 className="text-xl font-bold mb-4">Confirm Delete</h3>
-              <p className="mb-4">
-                Are you sure you want to delete this product?
-              </p>
+              <p className="mb-4">Are you sure you want to delete this product?</p>
               <div className="flex justify-end">
                 <button
                   onClick={() => setShowModal(false)}
@@ -224,14 +220,10 @@ const Products = () => {
           </div>
         )}
 
-        {/* Display the list of products */}
         <div className="mt-6">
           <ul className="list-disc flex flex-col-reverse pl-6">
             {products.map((product, index) => (
-              <li
-                key={index}
-                className="flex items-center border rounded-lg p-9"
-              >
+              <li key={index} className="flex items-center border rounded-lg p-9">
                 <img
                   src={`${image_base}/${product.imageUrl}`}
                   alt={product.name}
@@ -240,7 +232,7 @@ const Products = () => {
                 <div className="flex-1">
                   <span className="text-lg font-semibold">{product.name}</span>
                   <p className="text-sm text-gray-500">
-                    Material Code: {product.materialCode}
+                    Material Code: {product.code}
                   </p>
                   <p className="text-sm text-gray-500">
                     Category: {product.category}
@@ -262,6 +254,13 @@ const Products = () => {
           )}
         </div>
       </div>
+
+      {/* Loader */}
+      {loading && (
+        <div className="fixed top-0 left-0 right-0 bottom-0 flex justify-center items-center bg-gray-900 bg-opacity-50">
+          <div className="animate-spin rounded-full h-32 w-32 border-t-2 border-b-2 border-gray-500"></div>
+        </div>
+      )}
     </div>
   );
 };
