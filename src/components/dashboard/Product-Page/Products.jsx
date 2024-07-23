@@ -1,11 +1,10 @@
-import React, { useState } from "react";
+import React, { useState, useEffect } from "react";
 import {
   addProduct,
   deleteProduct,
   getAllProducts,
   image_base,
 } from "../../../libs/backendAPIs";
-import { useEffect } from "react";
 
 const Products = () => {
   const [products, setProducts] = useState([]);
@@ -35,8 +34,7 @@ const Products = () => {
 
   const categories = [
     "Solid",
-    "Pattern",
-    "3D",
+    "3D Pattern",
     "Elegant Series",
     "Fabric",
     "Marble",
@@ -221,9 +219,10 @@ const Products = () => {
         )}
 
         <div className="mt-6">
-          <ul className="list-disc flex flex-col-reverse pl-6">
+          <ul className="list-decimal flex flex-col-reverse pl-6">
             {products.map((product, index) => (
               <li key={index} className="flex items-center border rounded-lg p-9">
+                <span className="mr-4">{index + 1}.</span> {/* Index number */}
                 <img
                   src={`${image_base}/${product.imageUrl}`}
                   alt={product.name}
