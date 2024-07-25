@@ -1,6 +1,6 @@
 import axios from "axios";
 
-export const backend_base = "http://localhost:4000";
+export const backend_base = "formitebackendnew2024-production-1282.up.railway.app";
 // export const backend_base = "https://auction-backend-production-df32.up.railway.app";
 export const image_base = `${backend_base}/uploads`;
 
