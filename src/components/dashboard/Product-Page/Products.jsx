@@ -21,8 +21,11 @@ const Products = () => {
     const fetchAllProducts = async () => {
       setLoading(true); // Set loading to true before fetching
       try {
+
         const res = await getAllProducts();
+      
         setProducts(res?.products);
+      
       } catch (error) {
         console.log("Error fetching products:", error);
       } finally {
@@ -152,7 +155,7 @@ const Products = () => {
                     className="mt-1 focus:ring-blue-500 focus:border-blue-500 block w-full shadow-sm sm:text-sm border-gray-300 rounded-md"
                   >
                     <option value="">Select a category</option>
-                    {categories.map((category, index) => (
+                    {categories?.map((category, index) => (
                       <option key={index} value={category}>
                         {category}
                       </option>
@@ -220,7 +223,7 @@ const Products = () => {
 
         <div className="mt-6">
           <ul className="list-decimal flex flex-col-reverse pl-6">
-            {products.map((product, index) => (
+            {products?.map((product, index) => (
               <li key={index} className="flex items-center border rounded-lg p-9">
                 <span className="mr-4">{index + 1}.</span> {/* Index number */}
                 <img
@@ -246,7 +249,7 @@ const Products = () => {
               </li>
             ))}
           </ul>
-          {products.length === 0 && (
+          {products?.length === 0 && (
             <p className="text-gray-500 flex justify-center">
               No products available
             </p>
